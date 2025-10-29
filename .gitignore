@@ -1,0 +1,24 @@
+# Node
+node_modules/
+dist/
+npm-debug.log*
+package-lock.json
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Environment
+appsettings.Development.json
+*.env

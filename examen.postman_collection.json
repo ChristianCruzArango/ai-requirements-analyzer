@@ -1,0 +1,221 @@
+{
+	"info": {
+		"_postman_id": "fd672223-f770-41ea-a92c-14417026fd6c",
+		"name": "Probar WebApis Spartane Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "1501668"
+	},
+	"item": [
+		{
+			"name": "Obtener Token",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://108.60.201.12/WebApiLicitacionesCaasim/oauth/token"
+			},
+			"response": []
+		},
+		{
+			"name": "ListaSelAll",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU5ODIyIiwiYXVkIjoiNDE0ZTE5MjdhMzg4NGY2OGFiYzc5ZjcyODM4MzdmZDEiLCJleHAiOjE3NjA3MjE0MTcsIm5iZiI6MTc2MDcyMDgxN30.YpmmkLAJBFXFRWoPxUDl6Qczyr2WGWRT1b6QUXITHOo"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://108.60.201.12/WebApiLicitacionesCaasim/api/pedido/ListaSelAll?startRowIndex=1&maximumRows=10&Where=pedido.id_estado_pedido=1&OrderBy=pedido.id_pedido ASC",
+					"protocol": "http",
+					"host": [
+						"108",
+						"60",
+						"201",
+						"12"
+					],
+					"path": [
+						"WebApiLicitacionesCaasim",
+						"api",
+						"pedido",
+						"ListaSelAll"
+					],
+					"query": [
+						{
+							"key": "startRowIndex",
+							"value": "1"
+						},
+						{
+							"key": "maximumRows",
+							"value": "10"
+						},
+						{
+							"key": "Where",
+							"value": "pedido.id_estado_pedido=1"
+						},
+						{
+							"key": "OrderBy",
+							"value": "pedido.id_pedido ASC"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU5ODIyIiwiYXVkIjoiNDE0ZTE5MjdhMzg4NGY2OGFiYzc5ZjcyODM4MzdmZDEiLCJleHAiOjE3NjA3MjQ5MTAsIm5iZiI6MTc2MDcyNDMxMH0.6Rjl26P_zvZ-sEil88ZFEyJbf_31QzHcHVUzCZD-3SQ"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"folio\": \"PRUEBA\",\r\n\"consecutivo_completo\": \"PRUEBA\",\r\n\"id_tipo_documento_pedido\": 1,\r\n\"id_tipo_pedido\": 1,\r\n\"id_proveedor\": 1,\r\n\"id_procedimiento_adquisicion\": 1,\r\n\"fecha_pedido\": \"2025-10-17\",\r\n\"numero_contrato\": \"PRUEBA\",\r\n\"destinatario_factura\": \"PRUEBA\",\r\n\"direccion_entrega\": \"PRUEBA\",\r\n\"fecha_entrega\": \"2025-10-17\",\r\n\"tiempo_entrega\": \"PRUEBA\",\r\n\"persona_elaboro\": \"PRUEBA\",\r\n\"persona_autorizo\": \"PRUEBA\",\r\n\"iniciales\": \"PRUEBA\",\r\n\"subtotal\": 100,\r\n\"total_iva\": 100,\r\n\"total_retenciones\": 100,\r\n\"monto_total\": 100,\r\n\"id_estado_pedido\": 1,\r\n\"id_estado_surtido\": 1,\r\n\"observaciones\": \"PRUEBA\",\r\n\"fecha_registro\": \"2025-10-17\",\r\n\"hora_registro\": \"08:00\",\r\n\"id_usuario_registro\": 1,\r\n\"fecha_modifica\": \"2025-10-17\",\r\n\"hora_modifica\": \"08:00\",\r\n\"id_usuario_modifica\": 1,\r\n\"fecha_aprueba\": \"2025-10-17\",\r\n\"hora_aprueba\": \"08:00\",\r\n\"id_usuario_aprueba\": 1,\r\n\"id_archivo_firma\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://108.60.201.12/WebApiLicitacionesCaasim/api/pedido/Post"
+			},
+			"response": []
+		},
+		{
+			"name": "Get",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU5ODIyIiwiYXVkIjoiNDE0ZTE5MjdhMzg4NGY2OGFiYzc5ZjcyODM4MzdmZDEiLCJleHAiOjE3NjA3MjQ5MTAsIm5iZiI6MTc2MDcyNDMxMH0.6Rjl26P_zvZ-sEil88ZFEyJbf_31QzHcHVUzCZD-3SQ"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://108.60.201.12/WebApiLicitacionesCaasim/api/pedido/Get?id=1",
+					"protocol": "http",
+					"host": [
+						"108",
+						"60",
+						"201",
+						"12"
+					],
+					"path": [
+						"WebApiLicitacionesCaasim",
+						"api",
+						"pedido",
+						"Get"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU5ODIyIiwiYXVkIjoiNDE0ZTE5MjdhMzg4NGY2OGFiYzc5ZjcyODM4MzdmZDEiLCJleHAiOjE3NjA3MjQ5MTAsIm5iZiI6MTc2MDcyNDMxMH0.6Rjl26P_zvZ-sEil88ZFEyJbf_31QzHcHVUzCZD-3SQ"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"id_pedido\": 2,\r\n\"folio\": \"PRUEBA\",\r\n\"consecutivo_completo\": \"PRUEBA\",\r\n\"id_tipo_documento_pedido\": 1,\r\n\"id_tipo_pedido\": 1,\r\n\"id_proveedor\": 1,\r\n\"id_procedimiento_adquisicion\": 1,\r\n\"fecha_pedido\": \"2025-10-17\",\r\n\"numero_contrato\": \"PRUEBA\",\r\n\"destinatario_factura\": \"PRUEBA\",\r\n\"direccion_entrega\": \"PRUEBA\",\r\n\"fecha_entrega\": \"2025-10-17\",\r\n\"tiempo_entrega\": \"PRUEBA\",\r\n\"persona_elaboro\": \"PRUEBA\",\r\n\"persona_autorizo\": \"PRUEBA\",\r\n\"iniciales\": \"PRUEBA\",\r\n\"subtotal\": 100,\r\n\"total_iva\": 100,\r\n\"total_retenciones\": 100,\r\n\"monto_total\": 100,\r\n\"id_estado_pedido\": 1,\r\n\"id_estado_surtido\": 1,\r\n\"observaciones\": \"PRUEBA\",\r\n\"fecha_registro\": \"2025-10-17\",\r\n\"hora_registro\": \"08:00\",\r\n\"id_usuario_registro\": 1,\r\n\"fecha_modifica\": \"2025-10-17\",\r\n\"hora_modifica\": \"08:00\",\r\n\"id_usuario_modifica\": 1,\r\n\"fecha_aprueba\": \"2025-10-17\",\r\n\"hora_aprueba\": \"08:00\",\r\n\"id_usuario_aprueba\": 1,\r\n\"id_archivo_firma\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://108.60.201.12/WebApiLicitacionesCaasim/api/pedido/Put?Id=2",
+					"protocol": "http",
+					"host": [
+						"108",
+						"60",
+						"201",
+						"12"
+					],
+					"path": [
+						"WebApiLicitacionesCaasim",
+						"api",
+						"pedido",
+						"Put"
+					],
+					"query": [
+						{
+							"key": "Id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjU5ODIyIiwiYXVkIjoiNDE0ZTE5MjdhMzg4NGY2OGFiYzc5ZjcyODM4MzdmZDEiLCJleHAiOjE2NzAyNjk5ODcsIm5iZiI6MTY3MDI2ODE4N30.7Enx20eWMElcYlgyOp8fLcZmvvd7KLEXwrxdypYn-JM"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
