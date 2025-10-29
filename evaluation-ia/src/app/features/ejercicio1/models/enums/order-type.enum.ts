@@ -1,0 +1,6 @@
+export enum OrderType {
+  NORMAL = 'NORMAL',
+  URGENTE = 'URGENTE',
+  PROGRAMADO = 'PROGRAMADO',
+  ESPECIAL = 'ESPECIAL'
+}

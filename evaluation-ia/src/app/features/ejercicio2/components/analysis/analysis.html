@@ -1,0 +1,297 @@
+<div class="main-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <i class="fas fa-brain"></i>
+      Análisis de Especificaciones con IA
+    </h1>
+    <p class="page-subtitle">
+      Ingrese la especificación de software y la IA analizará automáticamente los procesos, subprocesos y casos de uso necesarios
+    </p>
+  </div>
+
+  <div class="specification-section">
+    <h3 class="section-title">
+      <i class="fas fa-file-alt"></i>
+      Especificación del Software
+    </h3>
+
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <label class="form-label">Tipo de Análisis *</label>
+        <select
+          class="form-select"
+          [value]="analysisType()"
+          (change)="updateAnalysisType($any($event.target).value)"
+          [disabled]="isAnalyzing()">
+          @for (option of analysisTypeOptions; track option.value) {
+            <option [value]="option.value">{{ option.label }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Descripción de la Necesidad *</label>
+      <textarea
+        class="form-control specification-textarea"
+        rows="8"
+        [value]="specification()"
+        (input)="updateSpecification($any($event.target).value)"
+        placeholder="Ejemplo: Necesito un sistema de gestión de inventario para una ferretería que permita controlar entradas y salidas de productos, gestionar proveedores, generar reportes de ventas y stock bajo, además de un módulo de facturación electrónica..."
+        [disabled]="isAnalyzing()">
+      </textarea>
+      <small class="form-text text-muted">
+        Mínimo 20 caracteres. Sea lo más detallado posible para obtener mejores resultados.
+      </small>
+    </div>
+
+    <div class="action-buttons mt-4">
+      <button
+        type="button"
+        class="btn btn-primary btn-lg"
+        (click)="analyzeSpecification()"
+        [disabled]="isAnalyzing() || specification().length < 20">
+        @if (isAnalyzing()) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          Analizando...
+        } @else {
+          <i class="fas fa-magic me-2"></i>
+          Analizar con IA
+        }
+      </button>
+      <button
+        type="button"
+        class="btn btn-secondary btn-lg"
+        (click)="clearAnalysis()"
+        [disabled]="isAnalyzing()">
+        <i class="fas fa-eraser me-2"></i>
+        Limpiar
+      </button>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert alert-danger mt-3">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        {{ errorMessage() }}
+      </div>
+    }
+  </div>
+
+  @if (hasResults()) {
+    <div class="results-section mt-4">
+      <div class="results-header">
+        <h3 class="results-title">
+          <i class="fas fa-sitemap"></i>
+          Análisis Completado
+        </h3>
+        <div class="export-buttons">
+          <button type="button" class="btn btn-info" (click)="exportResults()">
+            <i class="fas fa-download me-2"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+      <div class="analysis-content">
+        @for (process of analysisResult()?.procesos || []; track process.id_proceso) {
+          <div class="process-card">
+            <div class="process-header" (click)="showProcessDetail(process)">
+              <div class="process-title">
+                <i class="fas fa-project-diagram me-2"></i>
+                <strong>Proceso {{ process.id_proceso }}:</strong> {{ process.nombre }}
+              </div>
+              <button class="btn btn-sm btn-info">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+            <p class="process-description">{{ process.descripcion }}</p>
+
+            <div class="subprocesses-list">
+              @for (subprocess of process.subprocesos; track subprocess.id_subproceso) {
+                <div class="subprocess-card">
+                  <div class="subprocess-header" (click)="showSubprocessDetail(subprocess)">
+                    <div class="subprocess-title">
+                      <i class="fas fa-tasks me-2"></i>
+                      <strong>Subproceso {{ subprocess.id_subproceso }}:</strong> {{ subprocess.nombre }}
+                    </div>
+                    <button class="btn btn-sm btn-outline-info">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                  </div>
+                  <p class="subprocess-description">{{ subprocess.descripcion }}</p>
+
+                  <div class="usecases-list">
+                    @for (useCase of subprocess.casosUso; track useCase.id_caso_uso) {
+                      <div class="usecase-card" (click)="showUseCaseDetail(useCase)">
+                        <i class="fas fa-user-check me-2"></i>
+                        <span class="usecase-name">{{ useCase.nombre }}</span>
+                        <span class="usecase-actor">({{ useCase.actor_principal }})</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Modal Detalle de Proceso -->
+@if (selectedProcess) {
+  <div class="modal fade show" style="display: block;">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fas fa-project-diagram me-2"></i>
+            Detalle del Proceso
+          </h5>
+          <button type="button" class="btn-close" (click)="closeProcessDetail()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="detail-row">
+            <span class="detail-label">ID:</span>
+            <span class="detail-value">{{ selectedProcess.id_proceso }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Nombre:</span>
+            <span class="detail-value">{{ selectedProcess.nombre }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Descripción:</span>
+            <span class="detail-value">{{ selectedProcess.descripcion }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Subprocesos:</span>
+            <span class="detail-value">{{ selectedProcess.subprocesos?.length || 0 }}</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeProcessDetail()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show"></div>
+}
+
+<!-- Modal Detalle de Subproceso -->
+@if (selectedSubprocess) {
+  <div class="modal fade show" style="display: block;">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fas fa-tasks me-2"></i>
+            Detalle del Subproceso
+          </h5>
+          <button type="button" class="btn-close" (click)="closeSubprocessDetail()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="detail-row">
+            <span class="detail-label">ID:</span>
+            <span class="detail-value">{{ selectedSubprocess.id_subproceso }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Nombre:</span>
+            <span class="detail-value">{{ selectedSubprocess.nombre }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Descripción:</span>
+            <span class="detail-value">{{ selectedSubprocess.descripcion }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Casos de Uso:</span>
+            <span class="detail-value">{{ selectedSubprocess.casosUso?.length || 0 }}</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeSubprocessDetail()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show"></div>
+}
+
+<!-- Modal Detalle de Caso de Uso -->
+@if (selectedUseCase) {
+  <div class="modal fade show" style="display: block;">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fas fa-user-check me-2"></i>
+            Detalle del Caso de Uso
+          </h5>
+          <button type="button" class="btn-close" (click)="closeUseCaseDetail()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="detail-row">
+                <span class="detail-label">ID:</span>
+                <span class="detail-value">{{ selectedUseCase.id_caso_uso }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Nombre:</span>
+                <span class="detail-value">{{ selectedUseCase.nombre }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Actor Principal:</span>
+                <span class="detail-value">{{ selectedUseCase.actor_principal }}</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="detail-row">
+                <span class="detail-label">Tipo:</span>
+                <span class="detail-value">
+                  @if (selectedUseCase.tipo_caso_uso === 1) {
+                    Funcional
+                  } @else if (selectedUseCase.tipo_caso_uso === 2) {
+                    No Funcional
+                  } @else {
+                    Sistema
+                  }
+                </span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Descripción:</span>
+                <span class="detail-value">{{ selectedUseCase.descripcion }}</span>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-3">
+
+          <div class="row">
+            <div class="col-md-6">
+              <h6 class="text-primary mb-2">Precondiciones</h6>
+              <p class="detail-value">{{ selectedUseCase.precondiciones }}</p>
+            </div>
+            <div class="col-md-6">
+              <h6 class="text-primary mb-2">Postcondiciones</h6>
+              <p class="detail-value">{{ selectedUseCase.postcondiciones }}</p>
+            </div>
+          </div>
+
+          <hr class="my-3">
+
+          <div class="row">
+            <div class="col-12">
+              <h6 class="text-primary mb-2">Criterios de Aceptación</h6>
+              <p class="detail-value">{{ selectedUseCase.criterios_de_aceptacion }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeUseCaseDetail()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show"></div>
+}
